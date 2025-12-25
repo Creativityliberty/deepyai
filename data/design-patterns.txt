@@ -1,0 +1,134 @@
+================================================
+FILE: patterns/adapter.ts
+================================================
+/**
+ * Adapter Pattern Example
+ * Converts the interface of a class into another interface clients expect.
+ */
+
+// Target interface
+interface MediaPlayer {
+  play(audioType: string, fileName: string): void;
+}
+
+// Adaptee (incompatible interface)
+class AdvancedMediaPlayer {
+  playVlc(fileName: string): void {
+    console.log(`Playing vlc file: ${fileName}`);
+  }
+
+  playMp4(fileName: string): void {
+    console.log(`Playing mp4 file: ${fileName}`);
+  }
+}
+
+// Adapter
+class MediaAdapter implements MediaPlayer {
+  private advancedPlayer: AdvancedMediaPlayer;
+
+  constructor(audioType: string) {
+    this.advancedPlayer = new AdvancedMediaPlayer();
+  }
+
+  play(audioType: string, fileName: string): void {
+    if (audioType === "vlc") {
+      this.advancedPlayer.playVlc(fileName);
+    } else if (audioType === "mp4") {
+      this.advancedPlayer.playMp4(fileName);
+    }
+  }
+}
+
+// Client
+class AudioPlayer implements MediaPlayer {
+  play(audioType: string, fileName: string): void {
+    if (audioType === "mp3") {
+      console.log(`Playing mp3 file: ${fileName}`);
+    } else if (audioType === "vlc" || audioType === "mp4") {
+      const adapter = new MediaAdapter(audioType);
+      adapter.play(audioType, fileName);
+    } else {
+      console.log(`Invalid media type: ${audioType}`);
+    }
+  }
+}
+
+================================================
+FILE: patterns/factory.ts
+================================================
+/**
+ * Factory Pattern Example
+ * Creates objects without specifying the exact class to create.
+ */
+
+interface Shape {
+  draw(): void;
+}
+
+class Circle implements Shape {
+  draw(): void {
+    console.log("Drawing a Circle");
+  }
+}
+
+class Rectangle implements Shape {
+  draw(): void {
+    console.log("Drawing a Rectangle");
+  }
+}
+
+class Square implements Shape {
+  draw(): void {
+    console.log("Drawing a Square");
+  }
+}
+
+class ShapeFactory {
+  static getShape(shapeType: string): Shape | null {
+    if (shapeType === "CIRCLE") {
+      return new Circle();
+    } else if (shapeType === "RECTANGLE") {
+      return new Rectangle();
+    } else if (shapeType === "SQUARE") {
+      return new Square();
+    }
+    return null;
+  }
+}
+
+// Usage
+const circle = ShapeFactory.getShape("CIRCLE");
+circle?.draw();
+
+================================================
+FILE: patterns/singleton.ts
+================================================
+/**
+ * Singleton Pattern Example
+ * Ensures a class has only one instance and provides global access to it.
+ */
+
+class Database {
+  private static instance: Database;
+  private connection: string;
+
+  private constructor() {
+    this.connection = "Connected to database";
+  }
+
+  static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
+    }
+    return Database.instance;
+  }
+
+  query(sql: string): void {
+    console.log(`Executing query: ${sql}`);
+  }
+}
+
+// Usage
+const db1 = Database.getInstance();
+const db2 = Database.getInstance();
+console.log(db1 === db2); // true

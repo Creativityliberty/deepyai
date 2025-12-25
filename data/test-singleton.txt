@@ -1,0 +1,34 @@
+# Design Pattern: Singleton
+
+## Description
+Le pattern Singleton garantit qu'une classe n'a qu'une seule instance et fournit un point d'accès global à cette instance.
+
+## Utilisation
+- Gestion de configuration
+- Pool de connexions
+- Logger
+
+## Exemple C++
+```cpp
+class Singleton {
+private:
+    static Singleton* instance;
+    Singleton() {}
+    
+public:
+    static Singleton* getInstance() {
+        if (instance == nullptr) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+};
+```
+
+## Avantages
+- Contrôle strict de l'accès
+- Économie de mémoire
+
+## Inconvénients
+- Difficile à tester
+- Couplage fort
